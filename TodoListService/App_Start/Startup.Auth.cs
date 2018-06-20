@@ -14,11 +14,21 @@ namespace TodoListService
         // For more information on configuring authentication, please visit https://go.microsoft.com/fwlink/?LinkId=301864
         public void ConfigureAuth(IAppBuilder app)
         {
-            app.UseWindowsAzureActiveDirectoryBearerAuthentication(
-                new WindowsAzureActiveDirectoryBearerAuthenticationOptions
+            //app.UseWindowsAzureActiveDirectoryBearerAuthentication(
+            //    new WindowsAzureActiveDirectoryBearerAuthenticationOptions
+            //    {
+            //        Tenant = ConfigurationManager.AppSettings["ida:Tenant"],
+            //        TokenValidationParameters = new TokenValidationParameters{ SaveSigninToken = true, ValidAudience= ConfigurationManager.AppSettings["ida:Audience"] }
+            //    });
+            app.UseActiveDirectoryFederationServicesBearerAuthentication(
+                new ActiveDirectoryFederationServicesBearerAuthenticationOptions
                 {
-                    Tenant = ConfigurationManager.AppSettings["ida:Tenant"],
-                    TokenValidationParameters = new TokenValidationParameters{ SaveSigninToken = true, ValidAudience= ConfigurationManager.AppSettings["ida:Audience"] }
+                    MetadataEndpoint = ConfigurationManager.AppSettings["ida:AdfsMetadataEndpoint"],
+                    TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        SaveSigninToken = true,
+                        ValidAudience = ConfigurationManager.AppSettings["ida:Audience"]
+                    }
                 });
         }
     }

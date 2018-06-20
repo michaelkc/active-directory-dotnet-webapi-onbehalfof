@@ -49,12 +49,12 @@ namespace TodoListClient
         // The Redirect URI is the URI where Azure AD will return OAuth responses.
         // The Authority is the sign-in URL of the tenant.
         //
-        private static string aadInstance = ConfigurationManager.AppSettings["ida:AADInstance"];
-        private static string tenant = ConfigurationManager.AppSettings["ida:Tenant"];
+        //private static string aadInstance = ConfigurationManager.AppSettings["ida:AADInstance"];
+        //private static string tenant = ConfigurationManager.AppSettings["ida:Tenant"];
         private static string clientId = ConfigurationManager.AppSettings["ida:ClientId"];
         Uri redirectUri = new Uri(ConfigurationManager.AppSettings["ida:RedirectUri"]);
 
-        private static string authority = String.Format(CultureInfo.InvariantCulture, aadInstance, tenant);
+        private static string authority = ConfigurationManager.AppSettings["ida:Authority"];
 
         //
         // To authenticate to the To Do list service, the client needs to know the service's App ID URI.
@@ -62,7 +62,6 @@ namespace TodoListClient
         //
         private static string todoListResourceId = ConfigurationManager.AppSettings["todo:TodoListResourceId"];
         private static string todoListBaseAddress = ConfigurationManager.AppSettings["todo:TodoListBaseAddress"];
-
         private HttpClient httpClient = new HttpClient();
         private AuthenticationContext authContext = null;
 
@@ -73,7 +72,7 @@ namespace TodoListClient
         public MainWindow()
         {
             InitializeComponent();
-            authContext = new AuthenticationContext(authority, new FileCache());
+            authContext = new AuthenticationContext(authority, false);
             GetTodoList();
         }
 
